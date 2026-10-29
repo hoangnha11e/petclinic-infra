@@ -1,5 +1,5 @@
 resource "aws_iam_openid_connect_provider" "eks_cluster" {
-	url             = data.terraform_remote_state.terraform1.outputs["aws_eks_cluster_main_identity[0]_oidc[0]_issuer"]
+	url             = data.terraform_remote_state.terraform1.outputs["aws_eks_cluster_main_identity_oidc_issuer"]
 	client_id_list  = ["sts.amazonaws.com"]
 }
 
