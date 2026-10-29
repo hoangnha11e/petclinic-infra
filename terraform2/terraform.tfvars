@@ -1,0 +1,7 @@
+region = "ap-southeast-1"
+argocd_version = "10.9.6"
+argocd_apps_version = "2.0.6"
+gitops_repo_url = "https://github.com/hoangnha11e/petclinic-gitops.git"
+metrics_server_version = "3.14.0"
+cluster_autoscaler_version = "1.36.1"
+eso_version = "2.12.0"
