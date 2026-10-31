@@ -19,6 +19,7 @@ resource "aws_security_group" "db" {
     tags = {
         Name = "petclinic-db-security-group"
     }
+    depends_on = [aws_vpc_peering_connection.jenkins_infra_agent]
 }
 
 resource "aws_db_subnet_group" "main" {

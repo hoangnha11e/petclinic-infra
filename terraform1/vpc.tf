@@ -17,9 +17,7 @@ resource "aws_subnet" "public" {
 	cidr_block              = each.value
 	map_public_ip_on_launch = true
 	tags = {
-		Name                                       = "petclinic-public-subnet-${each.key}"
-		"kubernetes.io/role/elb"                   = "1"
-		"kubernetes.io/cluster/petclinic-cluster"  = "shared"
+		Name = "petclinic-public-subnet-${each.key}"
 	}
 }
 
@@ -82,6 +80,10 @@ resource "aws_route_table" "private" {
 		cidr_block     = "0.0.0.0/0"
 		nat_gateway_id = aws_nat_gateway.main.id
 	}
+	route {
+		cidr_block                = data.aws_vpc.jenkins_infra_agent.cidr_block
+		vpc_peering_connection_id = aws_vpc_peering_connection.jenkins_infra_agent.id
+	}
 	tags = {
 		Name = "petclinic-private-rt"
 	}
@@ -91,4 +93,17 @@ resource "aws_route_table_association" "private" {
 	for_each       = aws_subnet.private
 	subnet_id      = each.value.id
 	route_table_id = aws_route_table.private.id
+}
+
+resource "aws_vpc_peering_connection" "jenkins_infra_agent" {
+	vpc_id      = aws_vpc.main.id
+	peer_vpc_id = data.aws_vpc.jenkins_infra_agent.id
+	auto_accept = true
+	tags = { Name = "petclinic-vpc-peering-jenkins-infra-agent" }
+}
+
+resource "aws_route" "jenkins_infra_agent" {
+	route_table_id            = data.aws_route_table.jenkins_infra_agent.id
+	destination_cidr_block    = aws_vpc.main.cidr_block
+	vpc_peering_connection_id = aws_vpc_peering_connection.jenkins_infra_agent.id
 }
