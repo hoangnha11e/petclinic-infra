@@ -71,6 +71,7 @@ resource "helm_release" "cluster_autoscaler" {
 	set = [
 		{ name = "autoDiscovery.clusterName", value = data.terraform_remote_state.terraform1.outputs["aws_eks_cluster_main_name"] },
 		{ name = "awsRegion", value = var.region },
+		{ name = "rbac.serviceAccount.name", value = "cluster-autoscaler" },
 		{ name = "rbac.serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn", value = aws_iam_role.cluster_autoscaler.arn }
 	]
 }
