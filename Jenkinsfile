@@ -149,7 +149,7 @@ pipeline {
                                                 -u "$DB_ADMIN_USERNAME" \
                                                 -p"$DB_ADMIN_PASSWORD" \
                                                 -e "CREATE USER '${DB_SERVICE_USERNAME}'@'%' IDENTIFIED BY '${DB_SERVICE_PASSWORD}';
-                                                    GRANT SELECT, INSERT, UPDATE, DELETE, CREATE ON petclinic.* TO '${DB_SERVICE_USERNAME}'@'%';
+                                                    GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, INDEX, REFERENCES ON petclinic.* TO '${DB_SERVICE_USERNAME}'@'%';
                                                     FLUSH PRIVILEGES;"
                                         '''
                                     }

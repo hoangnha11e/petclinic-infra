@@ -6,6 +6,9 @@ resource "helm_release" "argocd" {
 	namespace        = "argocd"
 	create_namespace = true
 	timeout = 600
+	set = [
+		{ name = "crds.keep", value = "false" }
+	]
 }
 
 resource "helm_release" "argocd_apps" {
@@ -14,13 +17,19 @@ resource "helm_release" "argocd_apps" {
 	chart      = "argocd-apps"
 	version    = var.argocd_apps_version
 	namespace  = "argocd"
-	timeout    = 300
-	depends_on = [helm_release.argocd]
+	timeout    = 600
+	depends_on = [
+		helm_release.argocd,
+		helm_release.metrics_server,
+		helm_release.cluster_autoscaler,
+		helm_release.eso
+	]
 	values = [yamlencode({
 		applications = {
 			petclinic = {
 				namespace = "argocd"
 				project   = "default"
+				finalizers = ["resources-finalizer.argocd.argoproj.io"]
 				source = {
 					repoURL        = var.gitops_repo_url
 					targetRevision = "main"
