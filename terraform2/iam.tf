@@ -61,6 +61,7 @@ resource "aws_iam_role" "cluster_autoscaler" {
 		]
 	})
 	force_detach_policies = true
+	depends_on            = [aws_iam_policy.cluster_autoscaler]
 }
 
 resource "aws_iam_role_policy_attachments_exclusive" "cluster_autoscaler" {
@@ -103,6 +104,7 @@ resource "aws_iam_role" "eso" {
 		}]
 	})
 	force_detach_policies = true
+	depends_on            = [aws_iam_policy.eso]
 }
 
 resource "aws_iam_role_policy_attachments_exclusive" "eso" {
